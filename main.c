@@ -3,14 +3,18 @@
 #include "ui.h"
 
 // Main function
-// Creates the inventory list and starts the UI
+// This is the entry point of the entire program
+// It creates the inventory list and passes it to the UI controller
 int main() {
 
-    InventoryItem* list = NULL; // dynamic list
-    int count = 0;              // number of items
+    InventoryItem* list = NULL; // dynamic array of inventory items
+    int count = 0;              // number of items currently stored
 
+    // Start the user interface loop
     handleUserInput(&list, &count);
 
-    free(list); // free memory before exiting
+    // Free dynamically allocated memory before exiting
+    free(list);
+
     return 0;
 }
