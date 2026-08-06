@@ -1,22 +1,20 @@
+// codegen.c — DEFINES generateRestockCode()
+// If this file is missing or wrong, Visual Studio throws a linker error.
+
+#include "codegen.h"   // Must match the header declaration
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "codegen.h"
 
-// Generates a random code like: A9F3K2L8QZ
-// Steps:
-// 1. Seed random generator with time()
-// 2. Pick random characters from charset
-// 3. Store them in buffer
-void generateRestockCode(char *buffer, int length) {
+// This function creates a random restock code like "RSK1234"
+char* generateRestockCode() {
+    static char code[10];  // static so memory stays valid after return
 
-    const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    // Seed the random number generator
+    srand((unsigned int)time(NULL));
 
-    srand(time(NULL)); // seed random generator
+    // Create a 4-digit random number and store it in the code array
+    snprintf(code, sizeof(code), "RSK%04d", rand() % 10000);
 
-    for (int i = 0; i < length; i++) {
-        buffer[i] = charset[rand() % (sizeof(charset) - 1)];
-    }
-
-    buffer[length] = '\0'; // null terminate
+    return code;  // Return pointer to static array
 }
