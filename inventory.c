@@ -1,93 +1,119 @@
+#define _CRT_SECURE_NO_WARNINGS
+// ^ This disables Microsoft's "unsafe function" warnings.
+//   We still use scanf_s (safe version), but this prevents spam warnings.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "inventory.h"
-#include "codegen.h"   // for generateRestockCode()
+#include "codegen.h"
 
-// Adds a new item to the inventory list
-// Steps:
-// 1. Expand the list using realloc()
-// 2. Ask user for item details
-// 3. Generate a random restock code
-// 4. Increase item count
+// addItem()
+// Adds a new item to the inventory.
 void addItem(InventoryItem** list, int* count) {
 
-    // Expand list by 1 item
+    // Expand the dynamic array to fit one more item.
     *list = realloc(*list, (*count + 1) * sizeof(InventoryItem));
-    InventoryItem* item = &(*list)[*count];
 
     printf("Enter item name: ");
-    scanf_s("%49s", item->name);
+
+    // FIX: scanf_s requires buffer size for %s inputs.
+    // %49s = read up to 49 characters + null terminator.
+    // Argument 2 = buffer
+    // Argument 3 = buffer size (REQUIRED by Microsoft secure CRT)
+    scanf_s("%49s",
+        (*list)[*count].name,
+        (unsigned)sizeof((*list)[*count].name));
 
     printf("Enter quantity: ");
-    scanf_s("%d", &item->quantity);
+
+    // For integers, scanf_s does NOT require a buffer size.
+    scanf_s("%d", &(*list)[*count].quantity);
 
     printf("Enter price: ");
-    scanf_s("%f", &item->price);
 
-    printf("Enter category: ");
-    scanf_s("%29s", item->category);
+    // Same rule: doubles do NOT require buffer size.
+    scanf_s("%lf", &(*list)[*count].price);
 
-    // Generate random restock code
-    generateRestockCode(item->restockCode, CODE_LEN);
+    // Generate a restock code and store it.
+    strcpy((*list)[*count].restockCode, generateRestockCode());
 
-    (*count)++;
+    (*count)++; // Increase item count.
+
+    printf("Item added successfully!\n");
 }
 
-// Updates an existing item
-// User chooses item by index
+// updateItem()
+// Updates an existing item.
 void updateItem(InventoryItem* list, int count) {
-    int index;
+    char name[50];
 
-    printf("Enter item index to update: ");
-    scanf_s("%d", &index);
+    printf("Enter item name to update: ");
 
-    if (index < 0 || index >= count) {
-        printf("Invalid index.\n");
-        return;
+    // FIX: buffer size required for %s
+    scanf_s("%49s",
+        name,
+        (unsigned)sizeof(name));
+
+    // Search for the item
+    for (int i = 0; i < count; i++) {
+        if (strcmp(list[i].name, name) == 0) {
+
+            printf("New quantity: ");
+            scanf_s("%d", &list[i].quantity);
+
+            printf("New price: ");
+            scanf_s("%lf", &list[i].price);
+
+            printf("Item updated!\n");
+            return;
+        }
     }
 
-    printf("New quantity: ");
-    scanf_s("%d", &list[index].quantity);
-
-    printf("New price: ");
-    scanf_s("%f", &list[index].price);
+    printf("Item not found.\n");
 }
 
-// Removes an item from the list
-// Steps:
-// 1. Ask for index
-// 2. Shift items left
-// 3. Reduce count
+// removeItem()
+// Removes an item from the inventory.
 void removeItem(InventoryItem* list, int* count) {
-    int index;
+    char name[50];
 
-    printf("Enter item index to remove: ");
-    scanf_s("%d", &index);
+    printf("Enter item name to remove: ");
 
-    if (index < 0 || index >= *count) {
-        printf("Invalid index.\n");
-        return;
+    // FIX: buffer size required for %s
+    scanf_s("%49s",
+        name,
+        (unsigned)sizeof(name));
+
+    // Search for the item
+    for (int i = 0; i < *count; i++) {
+        if (strcmp(list[i].name, name) == 0) {
+
+            // Shift items left to overwrite the removed item.
+            for (int j = i; j < *count - 1; j++) {
+                list[j] = list[j + 1];
+            }
+
+            (*count)--;
+
+            printf("Item removed!\n");
+            return;
+        }
     }
 
-    for (int i = index; i < *count - 1; i++) {
-        list[i] = list[i + 1];
-    }
-
-    (*count)--;
+    printf("Item not found.\n");
 }
 
-// Prints all items
+// listItems()
+// Prints all items.
 void listItems(InventoryItem* list, int count) {
     printf("\n--- Inventory List ---\n");
 
     for (int i = 0; i < count; i++) {
-        printf("%d) %s | Qty: %d | $%.2f | Cat: %s | Code: %s\n",
-            i,
+        printf("%s | Qty: %d | Price: %.2f | Code: %s\n",
             list[i].name,
             list[i].quantity,
             list[i].price,
-            list[i].category,
             list[i].restockCode);
     }
 }
