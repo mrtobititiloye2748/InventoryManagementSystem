@@ -1,9 +1,23 @@
-﻿  codegen.c
-  fileio.c
-  inventory.c
-  main.c
-  search.c
+﻿  inventory.c
+C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(20,13): warning C4473: 'scanf_s' : not enough arguments passed for format string
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(20,13):
+      placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(20,13):
+      the missing variadic argument 2 is required by format string '%49s'
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(20,13):
+      this argument is used as a buffer size
+  
+C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(29,13): warning C4473: 'scanf_s' : not enough arguments passed for format string
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(29,13):
+      placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(29,13):
+      the missing variadic argument 2 is required by format string '%29s'
+      C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(29,13):
+      this argument is used as a buffer size
+  
+C:\Users\mrtob\source\repos\InventoryManagementSystem\inventory.c(32,5): warning C4013: 'generateRestockCode' undefined; assuming extern returning int
   ui.c
   Generating Code...
+inventory.obj : error LNK2019: unresolved external symbol generateRestockCode referenced in function addItem
 MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-C:\Users\mrtob\source\repos\InventoryManagementSystem\x64\Debug\InventoryManagementSystem.exe : fatal error LNK1120: 1 unresolved externals
+C:\Users\mrtob\source\repos\InventoryManagementSystem\x64\Debug\InventoryManagementSystem.exe : fatal error LNK1120: 2 unresolved externals
