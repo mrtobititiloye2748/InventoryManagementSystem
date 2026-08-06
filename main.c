@@ -1,20 +1,22 @@
+// main.c — ENTRY POINT OF THE PROGRAM
+// If this file is missing or wrong, Visual Studio throws "unresolved external symbol main".
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "ui.h"
+#include "ui.h"   // UI controller handles menu + user input
 
-// Main function
-// This is the entry point of the entire program
-// It creates the inventory list and passes it to the UI controller
 int main() {
+    // Pointer to dynamic inventory list
+    InventoryItem* list = NULL;
 
-    InventoryItem* list = NULL; // dynamic array of inventory items
-    int count = 0;              // number of items currently stored
+    // Number of items currently stored
+    int count = 0;
 
-    // Start the user interface loop
+    // Start the menu loop
     handleUserInput(&list, &count);
 
-    // Free dynamically allocated memory before exiting
+    // Free memory before exiting
     free(list);
 
-    return 0;
+    return 0; // Successful exit
 }
