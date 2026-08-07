@@ -53,7 +53,7 @@ void loadFromFile(const char *filename, InventoryItem **list, int *count) {
     // - price (double)
     // - restockCode (string)
     while (fscanf_s(fp,
-                    "%49s %d %lf %9s",
+                    "%49s %d %f %9s",
                     temp.name, (unsigned)sizeof(temp.name), // REQUIRED size
                     &temp.quantity,
                     &temp.price,
