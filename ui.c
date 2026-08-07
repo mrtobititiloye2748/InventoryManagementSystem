@@ -1,6 +1,16 @@
+/**
+ * @file ui.c
+ * @brief Implements the user interface and main menu controller.
+ *
+ * This module handles all user interaction, including printing the menu,
+ * reading user choices, and routing commands to the correct modules
+ * (Inventory, Search, FileIO). It acts as the central controller for
+ * the entire inventory management system.
+ */
+
 #define _CRT_SECURE_NO_WARNINGS
-// ^ Prevents Visual Studio from complaining about "unsafe" functions.
-//   We still use scanf_s, which is safe.
+ // ^ Prevents Visual Studio from complaining about "unsafe" functions.
+ //   scanf_s is used for secure input handling.
 
 #include <stdio.h>
 #include <string.h>
@@ -8,8 +18,21 @@
 #include "search.h"
 #include "fileio.h"
 
-// printMenu()
-// Displays the menu options.
+/**
+ * @brief Displays the menu options for the inventory system.
+ *
+ * This function prints all available actions the user can perform:
+ * - Add item
+ * - Update item
+ * - Remove item
+ * - List items
+ * - Search items
+ * - Save inventory to file
+ * - Load inventory from file
+ * - Exit program
+ *
+ * It is called at the beginning of each loop iteration in handleUserInput().
+ */
 void printMenu() {
     printf("\n--- Inventory Menu ---\n");
     printf("1. Add Item\n");
@@ -22,8 +45,28 @@ void printMenu() {
     printf("0. Exit\n");
 }
 
-// handleUserInput()
-// Main menu loop.
+/**
+ * @brief Main menu loop and command controller.
+ *
+ * This function continuously:
+ * - Prints the menu
+ * - Reads the user's choice
+ * - Calls the appropriate module function
+ *
+ * It handles:
+ * - Adding items
+ * - Updating items
+ * - Removing items
+ * - Listing items
+ * - Searching items
+ * - Saving inventory to a file
+ * - Loading inventory from a file
+ *
+ * The loop continues until the user selects option 0 (Exit).
+ *
+ * @param list Pointer to the dynamic array of InventoryItem pointers.
+ * @param count Pointer to the number of items currently stored.
+ */
 void handleUserInput(InventoryItem** list, int* count) {
     int choice;
     char term[50];
@@ -33,8 +76,7 @@ void handleUserInput(InventoryItem** list, int* count) {
         printMenu();
         printf("Enter choice: ");
 
-        // FIX: scanf → scanf_s
-        // For integers, no buffer size is needed.
+        // Secure integer input
         scanf_s("%d", &choice);
 
         switch (choice) {
@@ -57,7 +99,7 @@ void handleUserInput(InventoryItem** list, int* count) {
         case 5:
             printf("Search term: ");
 
-            // FIX: buffer size required for %s
+            // Secure string input
             scanf_s("%49s",
                 term,
                 (unsigned)sizeof(term));
@@ -68,7 +110,7 @@ void handleUserInput(InventoryItem** list, int* count) {
         case 6:
             printf("Filename: ");
 
-            // FIX: buffer size required for %s
+            // Secure string input
             scanf_s("%49s",
                 filename,
                 (unsigned)sizeof(filename));
@@ -79,7 +121,7 @@ void handleUserInput(InventoryItem** list, int* count) {
         case 7:
             printf("Filename: ");
 
-            // FIX: buffer size required for %s
+            // Secure string input
             scanf_s("%49s",
                 filename,
                 (unsigned)sizeof(filename));
