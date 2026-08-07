@@ -33,7 +33,7 @@ void addItem(InventoryItem** list, int* count) {
     printf("Enter price: ");
 
     // Same rule: doubles do NOT require buffer size.
-    scanf_s("%lf", &(*list)[*count].price);
+    scanf_s("%f", &(*list)[*count].price);
 
     // Generate a restock code and store it.
     strcpy((*list)[*count].restockCode, generateRestockCode());
@@ -63,7 +63,7 @@ void updateItem(InventoryItem* list, int count) {
             scanf_s("%d", &list[i].quantity);
 
             printf("New price: ");
-            scanf_s("%lf", &list[i].price);
+            scanf_s("%f", &list[i].price);
 
             printf("Item updated!\n");
             return;
