@@ -1,6 +1,15 @@
+/**
+ * @file inventory.c
+ * @brief Implements inventory management operations such as adding,
+ * updating, removing, and listing items.
+ *
+ * This module works with dynamically allocated arrays of InventoryItem
+ * and integrates with the CodeGen module to generate restock codes.
+ */
+
 #define _CRT_SECURE_NO_WARNINGS
-// ^ This disables Microsoft's "unsafe function" warnings.
-//   We still use scanf_s (safe version), but this prevents spam warnings.
+ // ^ Disables Microsoft's "unsafe function" warnings for scanf.
+ //   scanf_s is used for secure input handling.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +17,16 @@
 #include "inventory.h"
 #include "codegen.h"
 
-// addItem()
-// Adds a new item to the inventory.
+/**
+ * @brief Adds a new item to the inventory.
+ *
+ * This function expands the dynamic inventory array using realloc,
+ * prompts the user for item details, generates a restock code,
+ * and stores the new item in the list.
+ *
+ * @param list Pointer to the dynamic array of InventoryItem pointers.
+ * @param count Pointer to the number of items currently stored.
+ */
 void addItem(InventoryItem** list, int* count) {
 
     // Expand the dynamic array to fit one more item.
@@ -17,22 +34,15 @@ void addItem(InventoryItem** list, int* count) {
 
     printf("Enter item name: ");
 
-    // FIX: scanf_s requires buffer size for %s inputs.
-    // %49s = read up to 49 characters + null terminator.
-    // Argument 2 = buffer
-    // Argument 3 = buffer size (REQUIRED by Microsoft secure CRT)
+    // Secure input: scanf_s requires buffer size for %s inputs.
     scanf_s("%49s",
         (*list)[*count].name,
         (unsigned)sizeof((*list)[*count].name));
 
     printf("Enter quantity: ");
-
-    // For integers, scanf_s does NOT require a buffer size.
     scanf_s("%d", &(*list)[*count].quantity);
 
     printf("Enter price: ");
-
-    // Same rule: doubles do NOT require buffer size.
     scanf_s("%f", &(*list)[*count].price);
 
     // Generate a restock code and store it.
@@ -43,14 +53,22 @@ void addItem(InventoryItem** list, int* count) {
     printf("Item added successfully!\n");
 }
 
-// updateItem()
-// Updates an existing item.
+/**
+ * @brief Updates an existing inventory item.
+ *
+ * Searches for an item by name and allows the user to modify
+ * its quantity and price. If the item is not found, an error
+ * message is displayed.
+ *
+ * @param list Array of inventory items.
+ * @param count Number of items in the list.
+ */
 void updateItem(InventoryItem* list, int count) {
     char name[50];
 
     printf("Enter item name to update: ");
 
-    // FIX: buffer size required for %s
+    // Secure input for item name
     scanf_s("%49s",
         name,
         (unsigned)sizeof(name));
@@ -73,14 +91,22 @@ void updateItem(InventoryItem* list, int count) {
     printf("Item not found.\n");
 }
 
-// removeItem()
-// Removes an item from the inventory.
+/**
+ * @brief Removes an item from the inventory.
+ *
+ * Searches for an item by name, deletes it, and shifts the remaining
+ * items left to maintain array continuity. If the item is not found,
+ * an error message is displayed.
+ *
+ * @param list Array of inventory items.
+ * @param count Pointer to the number of items in the list.
+ */
 void removeItem(InventoryItem* list, int* count) {
     char name[50];
 
     printf("Enter item name to remove: ");
 
-    // FIX: buffer size required for %s
+    // Secure input for item name
     scanf_s("%49s",
         name,
         (unsigned)sizeof(name));
@@ -104,8 +130,14 @@ void removeItem(InventoryItem* list, int* count) {
     printf("Item not found.\n");
 }
 
-// listItems()
-// Prints all items.
+/**
+ * @brief Prints all inventory items.
+ *
+ * Displays each item's name, quantity, price, and restock code.
+ *
+ * @param list Array of inventory items.
+ * @param count Number of items in the list.
+ */
 void listItems(InventoryItem* list, int count) {
     printf("\n--- Inventory List ---\n");
 
