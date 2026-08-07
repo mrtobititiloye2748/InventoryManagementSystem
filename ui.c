@@ -1,11 +1,15 @@
+#define _CRT_SECURE_NO_WARNINGS
+// ^ Prevents Visual Studio from complaining about "unsafe" functions.
+//   We still use scanf_s, which is safe.
+
 #include <stdio.h>
 #include <string.h>
 #include "ui.h"
 #include "search.h"
 #include "fileio.h"
 
-// Prints the main menu options
-// This is shown every time the user needs to choose an action
+// printMenu()
+// Displays the menu options.
 void printMenu() {
     printf("\n--- Inventory Menu ---\n");
     printf("1. Add Item\n");
@@ -18,10 +22,9 @@ void printMenu() {
     printf("0. Exit\n");
 }
 
-// Handles user input and calls the correct module functions
-// This function loops until the user chooses 0 (Exit)
+// handleUserInput()
+// Main menu loop.
 void handleUserInput(InventoryItem** list, int* count) {
-
     int choice;
     char term[50];
     char filename[50];
@@ -29,10 +32,12 @@ void handleUserInput(InventoryItem** list, int* count) {
     do {
         printMenu();
         printf("Enter choice: ");
-        scanf("%d", &choice);
+
+        // FIX: scanf → scanf_s
+        // For integers, no buffer size is needed.
+        scanf_s("%d", &choice);
 
         switch (choice) {
-
         case 1:
             addItem(list, count);
             break;
@@ -51,19 +56,34 @@ void handleUserInput(InventoryItem** list, int* count) {
 
         case 5:
             printf("Search term: ");
-            scanf("%49s", term);
+
+            // FIX: buffer size required for %s
+            scanf_s("%49s",
+                term,
+                (unsigned)sizeof(term));
+
             searchItems(*list, *count, term);
             break;
 
         case 6:
             printf("Filename: ");
-            scanf("%49s", filename);
+
+            // FIX: buffer size required for %s
+            scanf_s("%49s",
+                filename,
+                (unsigned)sizeof(filename));
+
             saveToFile(filename, *list, *count);
             break;
 
         case 7:
             printf("Filename: ");
-            scanf("%49s", filename);
+
+            // FIX: buffer size required for %s
+            scanf_s("%49s",
+                filename,
+                (unsigned)sizeof(filename));
+
             loadFromFile(filename, list, count);
             break;
 
@@ -72,7 +92,7 @@ void handleUserInput(InventoryItem** list, int* count) {
             break;
 
         default:
-            printf("Invalid choice. Try again.\n");
+            printf("Invalid choice.\n");
         }
 
     } while (choice != 0);
